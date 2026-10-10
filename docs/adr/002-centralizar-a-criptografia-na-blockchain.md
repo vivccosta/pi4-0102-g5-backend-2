@@ -7,12 +7,12 @@ Status: aceito
 
 **Alternativas consideradas:**
 
-Realizar a criptografia no frontend via navegador: descartado por expor regras sensíveis e depender do poder de processamento do cliente.
+- Realizar a criptografia no frontend via navegador: descartado por expor regras sensíveis e depender do poder de processamento do cliente.
 
-Deixar a criptografia no backend de api: descartado para manter a integridade e imutabilidade encapsulada no módulo de blockchain.
+- Deixar a criptografia no backend de api: descartado para manter a integridade e imutabilidade encapsulada no módulo de blockchain.
 
 **Consequências:**
 
-Positivas: Centralização da segurança e consistência das evidências criptográficas em um único componente isolado.
+- Positivas: Centralização da segurança e consistência das evidências criptográficas em um único componente isolado.
 
-Negativas: Acoplamento da lógica de hash ao módulo de blockchain, exigindo chamadas extras de comunicação entre os backends.
+- Negativas: Acoplamento da lógica de hash ao módulo de blockchain, exigindo chamadas extras de comunicação entre os backends.

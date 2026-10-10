@@ -9,7 +9,7 @@ Status: aceito
 
 Realizar a criptografia no frontend via navegador: descartado por expor regras sensíveis e depender do poder de processamento do cliente.
 
-Deixar a criptografia no backend core de regras de negócio: descartado para manter a responsabilidade de integridade e imutabilidade encapsulada estritamente no módulo de blockchain.
+Deixar a criptografia no backend de api: descartado para manter a integridade e imutabilidade encapsulada no módulo de blockchain.
 
 **Consequências:**
 

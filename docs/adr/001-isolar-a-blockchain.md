@@ -7,12 +7,12 @@ Status: aceito
 
 **Alternativas consideradas:**
 
-Rodar a lógica da blockchain no mesmo container do backend principal: descartado por violar a arquitetura distribuída exigida e acoplar excessivamente os serviços.
+- Rodar a lógica da blockchain no mesmo container do backend principal: descartado por violar a arquitetura distribuída exigida e acoplar excessivamente os serviços.
 
-Utilizar um serviço de blockchain externo em nuvem: descartado por ser limitado ou não gratuito.
+- Utilizar um serviço de blockchain externo em nuvem: descartado por ser limitado ou não gratuito.
 
 **Consequências:**
 
-Positivas: Modularidade clara, facilidade de escalabilidade independente e atendimento estrito às regras da arquitetura distribuída.
+- Positivas: Modularidade clara, facilidade de escalabilidade independente e atendimento estrito às regras da arquitetura distribuída.
 
-Negativas: Maior complexidade na configuração da rede interna e comunicação via rede entre os containers.
+- Negativas: Maior complexidade na configuração da rede interna e comunicação via rede entre os containers.

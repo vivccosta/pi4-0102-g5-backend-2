@@ -9,7 +9,7 @@ Status: aceito
 
 Rodar a lógica da blockchain no mesmo container do backend principal: descartado por violar a arquitetura distribuída exigida e acoplar excessivamente os serviços.
 
-Utilizar um serviço de blockchain externo gerenciado na nuvem: descartado por não atender às restrições acadêmicas de infraestrutura local com containers.
+Utilizar um serviço de blockchain externo em nuvem: descartado por ser limitado ou não gratuito.
 
 **Consequências:**
 

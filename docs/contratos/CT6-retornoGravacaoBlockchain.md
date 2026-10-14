@@ -1,4 +1,4 @@
-### CT3: retornoGravacaoBlockchain
+### CT6: retornoGravacaoBlockchain
 
 | Linha | Valor |
 | :--- | :--- |

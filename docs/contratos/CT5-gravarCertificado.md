@@ -1,4 +1,4 @@
-### CT2: gravarCertificado
+### CT5: gravarCertificado
 
 | Linha | Valor |
 | :--- | :--- |

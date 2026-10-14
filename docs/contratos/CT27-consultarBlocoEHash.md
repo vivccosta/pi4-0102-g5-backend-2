@@ -1,4 +1,4 @@
-# Contrato CT2: consultarBlocoEHash
+# Contrato CT27: consultarBlocoEHash
 
 | Linha | Valor |
 | :--- | :--- |

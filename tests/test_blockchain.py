@@ -45,6 +45,7 @@ def test_gravar_certificado_com_binario_pdf():
     pdf_binario = b"%PDF-1.4 certificado da aluna Maria Silva Santos"
     dados = {
         "nomeAluno": "Maria Silva Santos",
+        "cpfAluno": "123.456.789-00",
         "curso": "Engenharia de Software",
         "dataConclusao": "2026-10-12",
         "cargaHoraria": 20,

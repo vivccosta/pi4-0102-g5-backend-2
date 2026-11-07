@@ -80,6 +80,7 @@ def processar_gravar_certificado(dados: Dict[str, Any]) -> Dict[str, Any]:
     # Metadados do certificado para o bloco
     metadados_bloco = {
         "nomeAluno": dados.get("nomeAluno", ""),
+        "cpfAluno": str(dados.get("cpfAluno") or dados.get("cpf") or dados.get("documentoAluno") or ""),
         "curso": dados.get("curso", ""),
         "dataConclusao": str(dados.get("dataConclusao", "")),
         "cargaHoraria": dados.get("cargaHoraria", 0),

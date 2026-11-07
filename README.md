@@ -62,6 +62,7 @@ O Backend 1 envia os metadados do aluno e o binário do PDF (em base64):
 {
   "evento": "gravarCertificado",
   "nomeAluno": "Maria Silva Santos",
+  "cpfAluno": "123.456.789-00",
   "curso": "Engenharia de Software",
   "dataConclusao": "2026-10-12",
   "cargaHoraria": 20,
@@ -116,6 +117,7 @@ O Backend 1 pode consultar enviando o **hash** OU o **binário do PDF** (em base
   "timestamp": "2026-11-07T17:40:00Z",
   "dados": {
     "nomeAluno": "Maria Silva Santos",
+    "cpfAluno": "123.456.789-00",
     "curso": "Engenharia de Software",
     "dataConclusao": "2026-10-12",
     "cargaHoraria": 20

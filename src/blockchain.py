@@ -43,7 +43,7 @@ class Bloco:
     Campos:
     - indice: posição sequencial do bloco (0 = gênesis)
     - timestamp: data e hora de criação em UTC (ISO 8601)
-    - dados: metadados do certificado (nomeAluno, curso, dataConclusao, cargaHoraria)
+    - dados: metadados do certificado (nomeAluno, cpfAluno, curso, dataConclusao, cargaHoraria)
     - hashCertificado: SHA-256 do binário do PDF do certificado (com prefixo 0x)
     - hashAnterior: hash do bloco imediatamente anterior
     - hashBloco: SHA-256 de todo o conteúdo do bloco, assegurando o encadeamento

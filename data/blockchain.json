@@ -1,0 +1,16 @@
+{
+  "cadeia": [
+    {
+      "indice": 0,
+      "timestamp": "2026-01-01T00:00:00Z",
+      "dados": {
+        "tipo": "genesis",
+        "descricao": "Timbro Blockchain Genesis Block"
+      },
+      "hashCertificado": "0",
+      "hashAnterior": "0",
+      "hashBloco": "0x41f9c94d4017ef6c18d203135bede2973f81ed01b6825591d6f7e65719fa31cb"
+    }
+  ],
+  "hashesRevogados": []
+}

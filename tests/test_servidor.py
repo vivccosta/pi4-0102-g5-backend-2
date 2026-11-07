@@ -47,6 +47,7 @@ async def executar_testes_websocket():
             msg_gravar = {
                 "evento": "gravarCertificado",
                 "nomeAluno": "Maria Silva Santos",
+                "cpfAluno": "123.456.789-00",
                 "curso": "Engenharia de Software",
                 "dataConclusao": "2026-10-12",
                 "cargaHoraria": 20,
@@ -88,6 +89,7 @@ async def executar_testes_websocket():
             assert resp_cons1["encontrado"] is True
             assert resp_cons1["bloco"] == 1
             assert resp_cons1["dados"]["nomeAluno"] == "Maria Silva Santos"
+            assert resp_cons1["dados"]["cpfAluno"] == "123.456.789-00"
             print("✓ Evento 'consultarHash' por HASH retornou confirmação (existe=True)")
 
             # ------------------------------------------------------------------ #

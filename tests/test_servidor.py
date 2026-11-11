@@ -46,6 +46,7 @@ async def executar_testes_websocket():
 
             msg_gravar = {
                 "evento": "gravarCertificado",
+                "idRequisicao": "req-uuid-1234",
                 "nomeAluno": "Maria Silva Santos",
                 "cpfAluno": "123.456.789-00",
                 "curso": "Engenharia de Software",
@@ -60,6 +61,7 @@ async def executar_testes_websocket():
             assert resp["status"] is True
             assert resp["bloco"] == 1
             assert resp["hash"].startswith("0x")
+            assert resp["idRequisicao"] == "req-uuid-1234"
             hash_certificado = resp["hash"]
             print(f"✓ Evento 'gravarCertificado' gravou bloco #{resp['bloco']} (Hash: {hash_certificado[:18]}...)")
 
@@ -78,6 +80,7 @@ async def executar_testes_websocket():
             # ------------------------------------------------------------------ #
             msg_consulta_hash = {
                 "evento": "consultarHash",
+                "idRequisicao": "req-uuid-5678",
                 "hash": hash_certificado,
             }
             await ws.send(json.dumps(msg_consulta_hash))
@@ -88,6 +91,7 @@ async def executar_testes_websocket():
             assert resp_cons1["existe"] is True
             assert resp_cons1["encontrado"] is True
             assert resp_cons1["bloco"] == 1
+            assert resp_cons1["idRequisicao"] == "req-uuid-5678"
             assert resp_cons1["dados"]["nomeAluno"] == "Maria Silva Santos"
             assert resp_cons1["dados"]["cpfAluno"] == "123.456.789-00"
             print("✓ Evento 'consultarHash' por HASH retornou confirmação (existe=True)")
@@ -171,6 +175,21 @@ async def executar_testes_websocket():
             assert resp_blocos["total"] == 2
             assert len(resp_blocos["blocos"]) == 2
             print("✓ Evento 'listarBlocos' retornou a cadeia de blocos")
+
+            # ------------------------------------------------------------------ #
+            # Teste 10: Invalidação de Hash com idRequisicao (tolerância para Backend 1)
+            # ------------------------------------------------------------------ #
+            msg_invalidar = {
+                "evento": "invalidarHash",
+                "hash": hash_certificado,
+                "idRequisicao": "req-uuid-9999",
+            }
+            await ws.send(json.dumps(msg_invalidar))
+            resp_inv = json.loads(await ws.recv())
+
+            assert resp_inv["sucesso"] is True
+            assert resp_inv["idRequisicao"] == "req-uuid-9999"
+            print("✓ Evento 'invalidarHash' respondeu com sucesso e idRequisicao devolvido")
 
     shutil.rmtree(pasta_tmp, ignore_errors=True)
     print("-" * 60)

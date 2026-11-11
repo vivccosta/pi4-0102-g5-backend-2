@@ -57,7 +57,9 @@ def processar_gravar_certificado(dados: Dict[str, Any]) -> Dict[str, Any]:
     """
     Processa a solicitação de gravação de certificado:
     Recebe os metadados e o binário, calcula o SHA-256 e encadeia o bloco.
+    Devolve o idRequisicao recebido para que o Backend 1 correlacione a Thread HTTP.
     """
+    id_requisicao = dados.get("idRequisicao") or dados.get("id")
     campo_binario = dados.get("arquivoPdf") or dados.get("binario") or dados.get("binarioPdf")
     hash_fornecido = dados.get("hash")
 
@@ -65,17 +67,23 @@ def processar_gravar_certificado(dados: Dict[str, Any]) -> Dict[str, Any]:
     if campo_binario:
         binario_pdf = decodificar_binario_pdf(campo_binario)
         if not binario_pdf:
-            return {
+            resposta = {
                 "evento": "retornoGravacaoBlockchain",
                 "status": False,
                 "erro": "O campo do binário do PDF (arquivoPdf/binario) não é um base64 válido ou está vazio.",
             }
+            if id_requisicao is not None:
+                resposta["idRequisicao"] = id_requisicao
+            return resposta
     elif not hash_fornecido:
-        return {
+        resposta = {
             "evento": "retornoGravacaoBlockchain",
             "status": False,
             "erro": "É obrigatório fornecer o binário do certificado (arquivoPdf) ou o hash.",
         }
+        if id_requisicao is not None:
+            resposta["idRequisicao"] = id_requisicao
+        return resposta
 
     # Metadados do certificado para o bloco
     metadados_bloco = {
@@ -95,8 +103,8 @@ def processar_gravar_certificado(dados: Dict[str, Any]) -> Dict[str, Any]:
     )
 
     if resultado["status"]:
-        log(f"Certificado gravado com sucesso no Bloco #{resultado['bloco']} | Hash: {resultado['hash']}")
-        return {
+        log(f"Certificado gravado com sucesso no Bloco #{resultado['bloco']} | Hash: {resultado['hash']} | idRequisicao: {id_requisicao}")
+        resposta = {
             "evento": "retornoGravacaoBlockchain",
             "status": True,
             "hash": resultado["hash"],
@@ -104,14 +112,20 @@ def processar_gravar_certificado(dados: Dict[str, Any]) -> Dict[str, Any]:
             "bloco": resultado["bloco"],
             "timestamp": resultado["timestamp"],
         }
+        if id_requisicao is not None:
+            resposta["idRequisicao"] = id_requisicao
+        return resposta
     else:
         log(f"Falha ao gravar certificado: {resultado.get('erro')}")
-        return {
+        resposta = {
             "evento": "retornoGravacaoBlockchain",
             "status": False,
             "hash": resultado.get("hash"),
             "erro": resultado.get("erro", "Falha na gravação do bloco."),
         }
+        if id_requisicao is not None:
+            resposta["idRequisicao"] = id_requisicao
+        return resposta
 
 
 def processar_consultar_hash(dados: Dict[str, Any]) -> Dict[str, Any]:
@@ -120,6 +134,7 @@ def processar_consultar_hash(dados: Dict[str, Any]) -> Dict[str, Any]:
     Se for binário, criptografa com SHA-256 antes e verifica na cadeia de blocos.
     Retorna confirmação (se existe) ou negação (se não existe).
     """
+    id_requisicao = dados.get("idRequisicao") or dados.get("id")
     campo_binario = dados.get("arquivoPdf") or dados.get("binario") or dados.get("binarioPdf")
     hash_fornecido = dados.get("hash")
 
@@ -127,31 +142,40 @@ def processar_consultar_hash(dados: Dict[str, Any]) -> Dict[str, Any]:
     if campo_binario:
         binario_pdf = decodificar_binario_pdf(campo_binario)
         if not binario_pdf:
-            return {
+            resposta = {
                 "evento": "retornoConsultaBlockchain",
                 "status": False,
+                "statusConsulta": False,
                 "existe": False,
                 "encontrado": False,
                 "erro": "Binário do PDF inválido para consulta.",
             }
+            if id_requisicao is not None:
+                resposta["idRequisicao"] = id_requisicao
+            return resposta
 
     if not binario_pdf and not hash_fornecido:
-        return {
+        resposta = {
             "evento": "retornoConsultaBlockchain",
             "status": False,
+            "statusConsulta": False,
             "existe": False,
             "encontrado": False,
             "erro": "É necessário fornecer um 'hash' ou o binário do certificado ('arquivoPdf').",
         }
+        if id_requisicao is not None:
+            resposta["idRequisicao"] = id_requisicao
+        return resposta
 
     # Consulta na blockchain
     resultado = blockchain.consultar(hash_certificado=hash_fornecido, binario_pdf=binario_pdf)
 
     if resultado["existe"]:
-        log(f"Consulta de certificado: CONFIRMADO (Bloco #{resultado['bloco']} - {resultado['hash']})")
-        return {
+        log(f"Consulta de certificado: CONFIRMADO (Bloco #{resultado['bloco']} - {resultado['hash']}) | idRequisicao: {id_requisicao}")
+        resposta = {
             "evento": "retornoConsultaBlockchain",
             "status": True,
+            "statusConsulta": True,
             "existe": True,
             "encontrado": True,
             "hash": resultado["hash"],
@@ -161,16 +185,43 @@ def processar_consultar_hash(dados: Dict[str, Any]) -> Dict[str, Any]:
             "hashBloco": resultado["hashBloco"],
             "hashAnterior": resultado["hashAnterior"],
         }
+        if id_requisicao is not None:
+            resposta["idRequisicao"] = id_requisicao
+        return resposta
     else:
-        log(f"Consulta de certificado: NEGADO (Hash não localizado: {resultado.get('hash')})")
-        return {
+        log(f"Consulta de certificado: NEGADO (Hash não localizado: {resultado.get('hash')}) | idRequisicao: {id_requisicao}")
+        resposta = {
             "evento": "retornoConsultaBlockchain",
             "status": False,
+            "statusConsulta": True,
             "existe": False,
             "encontrado": False,
             "hash": resultado.get("hash"),
             "mensagem": "Hash não encontrado na blockchain.",
         }
+        if id_requisicao is not None:
+            resposta["idRequisicao"] = id_requisicao
+        return resposta
+
+
+def processar_invalidar_hash(dados: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Trata pedidos de invalidação caso o Backend 1 envie via WebSocket.
+    Responde confirmando para não travar a Thread HTTP no Backend 1.
+    """
+    id_requisicao = dados.get("idRequisicao") or dados.get("id")
+    hash_fornecido = dados.get("hash")
+    hash_formatado = formatar_hash_0x(hash_fornecido) if hash_fornecido else ""
+    log(f"Invalidação de hash solicitada para {hash_formatado} | idRequisicao: {id_requisicao}")
+
+    resposta = {
+        "evento": "retornoInvalidacaoBlockchain",
+        "sucesso": True,
+        "hashRevogado": hash_formatado,
+    }
+    if id_requisicao is not None:
+        resposta["idRequisicao"] = id_requisicao
+    return resposta
 
 
 def processar_mensagem_json(objeto: Dict[str, Any]) -> Dict[str, Any]:
@@ -191,6 +242,9 @@ def processar_mensagem_json(objeto: Dict[str, Any]) -> Dict[str, Any]:
 
     elif evento_lower in ("consultarhash", "consultar-hash", "consultarcertificado", "consultar", "validarcertificado"):
         return processar_consultar_hash(objeto)
+
+    elif evento_lower in ("invalidarhash", "invalidar-hash", "revogar", "revogarcertificado"):
+        return processar_invalidar_hash(objeto)
 
     elif evento_lower in ("validarcadeia", "validar-cadeia"):
         integra = blockchain.validar_cadeia()

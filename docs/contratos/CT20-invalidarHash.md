@@ -2,26 +2,26 @@
 
 | Linha | Valor |
 | :--- | :--- |
-| **Fronteira** | Externo |
-| **Quem chama** | Backend 1 |
-| **Quem responde** | Backend 2 (Blockchain) |
-| **Atende** | E6 |
-| **Como chamar** | Chamada RPC via WebSocket invalidarHash |
+| Fronteira | Externo |
+| Quem chama | Backend 1 |
+| Quem responde | Backend 2 (Blockchain) |
+| Atende | E6 |
+| Como chamar | Chamada RPC via WebSocket invalidarHash |
 
-## Entrada
+Entrada:
 
 | Campo | Tipo | Obrigatório | Exemplo |
 | :--- | :--- | :--- | :--- |
 | hash | texto | sim | 0x7f83b1657ff1fc... |
 
-## Saída
+Saída:
 
 | Campo | Tipo | Obrigatório | Exemplo |
 | :--- | :--- | :--- | :--- |
 | sucesso | booleano | sim | true |
 | hashRevogado | texto | sim | 0x7f83b1657ff1fc... |
 
-## Erros
+Erros:
 
 | Quando | O que volta |
 | :--- | :--- |

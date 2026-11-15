@@ -1,20 +1,20 @@
-### CT2: consultarHash
+# CT2: consultarHash
 
 | Linha | Valor |
 | :--- | :--- |
-| **Fronteira** | Interno |
-| **Quem chama** | Backend 1 (API) |
-| **Quem responde** | Backend 2 (Blockchain) |
-| **Atende** | E3 |
-| **Como chamar** | Mensagem enviada via WebSocket no evento `consultarHash` (JSON via WS) |
+| Fronteira | WebSocket |
+| Quem chama | Backend 1 (API) |
+| Quem responde | Backend 2 (Blockchain) |
+| Atende | E3 |
+| Como chamar | Mensagem enviada via WebSocket no evento consultarHash (JSON via WS) |
 
-#### Entrada
+Entrada:
 
 | Campo | Tipo | Obrigatório | Exemplo |
 | :--- | :--- | :--- | :--- |
 | hash | texto | sim | 0x7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069 |
 
-#### Saída
+Saída:
 
 | Campo | Tipo | Obrigatório | Exemplo |
 | :--- | :--- | :--- | :--- |
@@ -22,7 +22,7 @@
 | hash | texto | sim | 0x7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069 |
 | timestamp | texto | não | 2026-10-12T20:45:00Z |
 
-#### Erros
+Erros:
 
 | Quando | O que volta |
 | :--- | :--- |

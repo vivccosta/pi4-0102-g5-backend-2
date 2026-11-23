@@ -76,14 +76,15 @@ def processar_gravar_certificado(dados: Dict[str, Any]) -> Dict[str, Any]:
                 resposta["idRequisicao"] = id_requisicao
             return resposta
     elif not hash_fornecido:
-        resposta = {
-            "evento": "retornoGravacaoBlockchain",
-            "status": False,
-            "erro": "É obrigatório fornecer o binário do certificado (arquivoPdf) ou o hash.",
-        }
-        if id_requisicao is not None:
-            resposta["idRequisicao"] = id_requisicao
-        return resposta
+        # Se não enviou binário PDF nem hash pré-calculado, gera hash determinístico com os metadados
+        payload_metadados = (
+            f"{dados.get('nomeAluno', '')}|"
+            f"{dados.get('curso', '')}|"
+            f"{dados.get('dataConclusao', '')}|"
+            f"{dados.get('cargaHoraria', '')}|"
+            f"{dados.get('cpfAluno', '')}"
+        )
+        hash_fornecido = hashlib.sha256(payload_metadados.encode("utf-8")).hexdigest()
 
     # Metadados do certificado para o bloco
     metadados_bloco = {

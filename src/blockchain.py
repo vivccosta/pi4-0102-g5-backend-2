@@ -213,10 +213,8 @@ class Blockchain:
         elif hash_certificado is not None:
             hash_cert_calculado = formatar_hash_0x(hash_certificado)
         else:
-            return {
-                "status": False,
-                "erro": "É necessário fornecer o binário do certificado (arquivoPdf) ou o hash.",
-            }
+            payload_dados = json.dumps(dados_certificado, sort_keys=True)
+            hash_cert_calculado = formatar_hash_0x(hashlib.sha256(payload_dados.encode("utf-8")).hexdigest())
 
         chave_normalizada = normalizar_hash(hash_cert_calculado)
 
